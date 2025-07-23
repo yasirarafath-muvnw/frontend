@@ -22,6 +22,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <title>Frontend</title>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -32,12 +33,22 @@ export default function RootLayout({ children }) {
           toastOptions={{
             success: {
               style: {
-                background: "#d1fae5",
+                background: "#d1fae5", // greenish background
                 color: "#065f46",
               },
               iconTheme: {
                 primary: "#10b981",
                 secondary: "#d1fae5",
+              },
+            },
+            error: {
+              style: {
+                background: "#fee2e2", // light red
+                color: "#991b1b", // deep red text
+              },
+              iconTheme: {
+                primary: "#ef4444", // red icon
+                secondary: "#fee2e2",
               },
             },
           }}

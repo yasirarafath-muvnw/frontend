@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { useState } from 'react';
 import { endpoints } from '@/api/endpoints';
+import toast from 'react-hot-toast';
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -35,34 +36,28 @@ export default function Page() {
       password: data.password
     }
 
+    console.log('signupPayload', signupPayload);
     try {
       setLoading(true);
       setError('');
       const response = await axios.post(endpoints.signUp, signupPayload);
 
+      console.log('response', response);
       if (response.status === 201) {
         console.log('response', response);
+        toast.success("SignUp Successfully");
 
-
-        router.replace('')
+        router.replace('/dashboard')
       }
     } catch (err) {
+      toast.error("SignUp Failed");
+
       console.error('Signup error:', err);
       setError(err.response?.data?.message || 'Signup failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-
-  const handle = () => {
-
-    console.log('calling ')
-
-    router.push('/login')
-
-
-    // handleSubmit(onSubmit);
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
@@ -80,7 +75,7 @@ export default function Page() {
             Hi, let’s get started
           </h1>
 
-          <form className="space-y-5" onSubmit={handle}>
+          <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label className="block text-sm font-medium text-gray-700">Name</label>
               <input

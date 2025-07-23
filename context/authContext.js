@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
     setAccessToken("");
     setUser(null);
 
-    // router.push("/login");
+    router.replace("/auth/login");
   };
 
   return (

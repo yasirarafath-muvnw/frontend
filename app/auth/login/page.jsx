@@ -29,7 +29,8 @@ export default function Page() {
     resolver: zodResolver(schema),
   });
 
-  const notify = () => toast("LoggedIn Successfully");
+  const notify = () => toast.success("LoggedIn Successfully");
+  const errornotify = () => toast.error("Error Logging In User");
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -39,7 +40,9 @@ export default function Page() {
       await login(data.email, data.password);
       notify();
     } catch (err) {
+      console.log('err', err);
       setError(err.message);
+      errornotify(err.message);
     } finally {
       setLoading(false);
     }
