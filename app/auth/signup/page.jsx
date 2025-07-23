@@ -45,9 +45,10 @@ export default function Page() {
       console.log('response', response);
       if (response.status === 201) {
         console.log('response', response);
+
         toast.success("SignUp Successfully");
 
-        router.replace('/dashboard')
+        router.replace('/onboard')
       }
     } catch (err) {
       toast.error("SignUp Failed");

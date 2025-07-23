@@ -17,7 +17,7 @@ export default function Sidebar({ isOpen, onClose, onLogout }) {
       <div className="flex justify-between items-center px-4 py-3 border-b">
         <h2 className="text-lg font-semibold text-black">Sidebar</h2>
         <button
-          onClick={onClose}
+             onClick={onClose}
           className="text-gray-600 hover:text-red-500 text-xl"
         >
           ✕
@@ -51,7 +51,7 @@ export default function Sidebar({ isOpen, onClose, onLogout }) {
         </li>
         <li
           className="hover:text-blue-600 cursor-pointer"
-          onClick={onLogout}
+          onClick={onClose}
         >
           Logout
         </li>
