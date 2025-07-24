@@ -1,17 +1,22 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useUser } from "@/context/userContext";
 
 export default function Home() {
-  const { user } = useUser();
+  const { user, accessToken } = useUser();
+  const router = useRouter();
 
-  console.log("dfghjk.", user);
+  // useEffect(() => {
+  //   console.log("accessToken from context:", accessToken);
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <h1 className="text-3xl font-semibold mb-6 text-center text-gray-800">
-        Dashboard
-      </h1>
-    </div>
-  );
+  //   if (accessToken) {
+  //     router.push("/dashboard");
+  //   } else {
+  //     router.push("/auth/login");
+  //   }
+  // }, [accessToken]);
+
+  // return null;
 }

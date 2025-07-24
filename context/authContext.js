@@ -16,12 +16,17 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const storedToken = Cookies.get("accessToken");
+    const storedUser = sessionStorage.getItem("user");
 
     if (storedToken) {
       setAccessToken(storedToken);
-    } else {
-      setLoading(false);
     }
+
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+
+    setLoading(false);
   }, []);
 
   const login = async (email, password) => {
@@ -40,6 +45,8 @@ export const AuthProvider = ({ children }) => {
         sameSite: "Lax",
       });
 
+      sessionStorage.setItem("user", JSON.stringify(user));
+
       setAccessToken(token);
       setUser(user);
 
@@ -52,8 +59,44 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const signup = async (name, email, password) => {
+    try {
+      const response = await axios.post(endpoints.signUp, {
+        name,
+        email,
+        password,
+      });
+
+      console.log('signup response', response);
+
+      const token = response.data.accessToken;
+      const user = response.data.user;
+
+      console.log('signup user', user);
+      console.log('signup token', token);
+
+
+      Cookies.set("accessToken", token, {
+        expires: 1,
+        secure: true,
+        sameSite: "Lax",
+      });
+
+      sessionStorage.setItem("user", JSON.stringify(user));
+
+      setAccessToken(token);
+      setUser(user);
+
+      return { success: true };
+    } catch (err) {
+      throw new Error(err.response?.data?.message || "Signup failed");
+    }
+  };
+
+
   const logout = () => {
     Cookies.remove("accessToken");
+    sessionStorage.removeItem("user");
     setAccessToken("");
     setUser(null);
 
@@ -67,6 +110,7 @@ export const AuthProvider = ({ children }) => {
         accessToken,
         loading,
         login,
+        signup,
         logout,
       }}
     >

@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { endpoints } from '@/api/endpoints';
 import toast from 'react-hot-toast';
+import { useAuth } from '@/context/authContext';
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -19,6 +20,7 @@ export default function Page() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { signup } = useAuth();
 
   const {
     register,
@@ -29,32 +31,20 @@ export default function Page() {
   });
 
   const onSubmit = async (data) => {
-
-    const signupPayload = {
-      name: data.name,
-      email: data.email,
-      password: data.password
-    }
-
-    console.log('signupPayload', signupPayload);
     try {
       setLoading(true);
       setError('');
-      const response = await axios.post(endpoints.signUp, signupPayload);
 
-      console.log('response', response);
-      if (response.status === 201) {
-        console.log('response', response);
+      const { success } = await signup(data.name, data.email, data.password);
 
+      if (success) {
         toast.success("SignUp Successfully");
 
-        router.replace('/onboard')
+        router.replace('/onboard');
       }
     } catch (err) {
       toast.error("SignUp Failed");
-
-      console.error('Signup error:', err);
-      setError(err.response?.data?.message || 'Signup failed. Please try again.');
+      setError(err.message);
     } finally {
       setLoading(false);
     }

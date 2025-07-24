@@ -53,15 +53,19 @@ export default function OnboardPage() {
         console.log("formDataUpload", formDataUpload);
         console.log("formData", formData);
 
-        await axios.post(endpoints.postProfilePic, formDataUpload, {
+        const response = await axios.post(endpoints.postProfilePic, formDataUpload, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "multipart/form-data",
           },
         });
+
+        console.log('pic response', response);
+        console.log('pic response', response.data);
+
       }
 
-      await axios.post(
+      const response = await axios.post(
         endpoints.postProfileDetails,
         {
           ...formData,
@@ -76,7 +80,12 @@ export default function OnboardPage() {
         }
       );
 
-      // router.replace("/dashboard");
+      console.log('response', response);
+      console.log('response data', response.data);
+
+
+      router.replace("/dashboard");
+      
     } catch (err) {
       console.error("Submit error:", err);
       setError(err.response?.data?.message || "Something went wrong");

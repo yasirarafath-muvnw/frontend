@@ -51,7 +51,7 @@ export default function Sidebar({ isOpen, onClose, onLogout }) {
         </li>
         <li
           className="hover:text-blue-600 cursor-pointer"
-          onClick={onClose}
+          onClick={onLogout}
         >
           Logout
         </li>
