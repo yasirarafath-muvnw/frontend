@@ -11,12 +11,12 @@ export default function OnboardPage() {
   const router = useRouter();
 
   console.log('user', user)
-  
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     name: user?.name || "",
-    email: user?.email || "",
+    // email: user?.email || "",
     age: "",
     gender: "",
     comments: "",
@@ -68,7 +68,10 @@ export default function OnboardPage() {
       const response = await axios.post(
         endpoints.postProfileDetails,
         {
-          ...formData,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          age: formData.age,
+          gender: formData.gender,
           comments: formData.comments
             ? [{ body: formData.comments, date: new Date().toISOString() }]
             : [],
@@ -85,7 +88,7 @@ export default function OnboardPage() {
 
 
       router.replace("/dashboard");
-      
+
     } catch (err) {
       console.error("Submit error:", err);
       setError(err.response?.data?.message || "Something went wrong");
@@ -105,7 +108,7 @@ export default function OnboardPage() {
         className="space-y-4"
         encType="multipart/form-data"
       >
-        <input type="hidden" name="email" value={formData.email} />
+        {/* <input type="hidden" name="email" value={formData.email} /> */}
 
         <div>
           <label className="block text-sm text-gray-700">First Name</label>
