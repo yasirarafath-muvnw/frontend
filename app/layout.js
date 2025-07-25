@@ -3,6 +3,10 @@ import "./globals.css";
 import { AuthProvider } from "@/context/authContext";
 import { UserProvider } from "@/context/userContext";
 import { Toaster } from "react-hot-toast";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Providers from "@/components/Providers";
+
+const queryClient = new QueryClient();
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,21 +39,18 @@ const ToastConfig = {
       secondary: "#fee2e2",
     },
   },
-}
+};
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <title>Frontend</title>
+      <head>
+        <title>Frontend</title>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>
-          <UserProvider>{children}</UserProvider>
-        </AuthProvider>
-        <Toaster
-          toastOptions={ToastConfig}
-        />
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

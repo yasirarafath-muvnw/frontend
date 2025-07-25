@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { endpoints } from "@/api/endpoints";
+import { loginUser } from "@/api/mutations/auth";
 
 const AuthContext = createContext();
 
@@ -31,13 +32,13 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post(endpoints.login, { email, password });
-      const token = response.data.token;
-      const user = response.data.user;
+      const response = await loginUser({ email, password });
+      console.log('res', response)
+      const token = response.token;
+      const user = response.user;
 
-      console.log('token', token);
-      console.log('user', user);
-
+      console.log("token", token);
+      console.log("user", user);
 
       Cookies.set("accessToken", token, {
         expires: 1,
@@ -67,14 +68,13 @@ export const AuthProvider = ({ children }) => {
         password,
       });
 
-      console.log('signup response', response);
+      console.log("signup response", response);
 
       const token = response.data.accessToken;
       const user = response.data.user;
 
-      console.log('signup user', user);
-      console.log('signup token', token);
-
+      console.log("signup user", user);
+      console.log("signup token", token);
 
       Cookies.set("accessToken", token, {
         expires: 1,
@@ -92,7 +92,6 @@ export const AuthProvider = ({ children }) => {
       throw new Error(err.response?.data?.message || "Signup failed");
     }
   };
-
 
   const logout = () => {
     Cookies.remove("accessToken");

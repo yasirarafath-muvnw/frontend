@@ -1,7 +1,7 @@
 export const endpoints = {
-    signUp: "http://localhost:3000/api/auth/signup",
-    login: "http://localhost:3000/api/auth/login",
-    postProfilePic: 'http://localhost:3000/api/user/upload',
-    postProfileDetails: 'http://localhost:3000/api/user',
-    GetUserProfile: (data) => `http://localhost:3000/api/user/${data}`
+    signUp: "api/auth/signup",
+    login: "api/auth/login",
+    postProfilePic: 'api/user/upload',
+    postProfileDetails: 'api/user',
+    GetUserProfile: (data) => `api/user/${data}`
 }
