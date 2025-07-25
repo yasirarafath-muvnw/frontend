@@ -17,22 +17,23 @@ const menuItems = [
         items: [
             {
                 icon: Home,
+                label: "Dasboard",
+                href: "/dashboard",
+                visible: ["admin", "teacher"],
+            },
+            {
+                icon: User,
                 label: "Task",
                 href: "/dashboard/task",
                 visible: ["admin", "teacher", "student", "parent"],
             },
             {
-                icon: Users,
+                icon: Book,
                 label: "Project",
                 href: "/dashboard/project",
                 visible: ["admin", "teacher"],
             },
-            //   {
-            //     icon: User,
-            //     label: "Students",
-            //     href: "/list/students",
-            //     visible: ["admin", "teacher"],
-            //   },
+
             //   {
             //     icon: User,
             //     label: "Parents",
@@ -76,7 +77,7 @@ export default function Menue({ handleLogoutConfirmed }) {
     return (
         <div>
             {menuItems.map((section, sectionIdx) => (
-                <div key={sectionIdx} className="mb-4 justify-between p-2">
+                <div key={sectionIdx} className="mb-4 justify-between p-3">
                     <span className="block text-sm font-semibold mb-2 text-black">
                         {section.title}
                     </span>
@@ -86,10 +87,10 @@ export default function Menue({ handleLogoutConfirmed }) {
                             <Link
                                 href={item.href}
                                 key={itemIdx}
-                                className="flex items-center gap-2 py-1 hover:text-amber-500"
+                                className="flex items-center gap-2 py-2 hover:text-amber-500 justify-center lg:justify-start"
                             >
                                 <Icon size={20} color='black' />
-                                <span className='text-black'>{item.label}</span>
+                                <span className='text-black hidden lg:block'>{item.label}</span>
                             </Link>
                         );
                     })}

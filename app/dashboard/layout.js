@@ -43,8 +43,8 @@ export default function DashboardLayout({ children }) {
 
                     <Menue handleLogoutConfirmed={handleLogoutConfirmed}/>
                 </div>
-                <div className="flex w-[86%]  md:w-[92%] lg:w-[84%] xl:w-[86%] bg-white overflow-scroll">
-                    {/* <Navbar /> */}
+                <div className="flex w-[86%]  md:w-[92%] lg:w-[84%] xl:w-[86%] bg-white overflow-scroll flex-col">
+                    <Navbar />
                     {children}
                 </div>
             </div>
