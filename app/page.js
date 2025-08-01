@@ -7,8 +7,6 @@ import pokemon from "@/asset/images/pokemon.png";
 export default function Home() {
   return (
     <div className="min-h-screen flex">
-      
-      {/* Left: Full Height Image - 1/3 */}
       <div className="w-1/3 h-screen hidden md:block relative">
         <Image
           src={pokemon}
@@ -17,8 +15,6 @@ export default function Home() {
           className="object-cover"
         />
       </div>
-
-      {/* Right: Login Section - 2/3 */}
       <div className="w-full md:w-2/3 flex items-center justify-center bg-gradient-to-br from-indigo-100 via-white to-blue-100 p-6">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-xl hover:shadow-blue-300 transition duration-300 ease-in-out p-8">
           <div className="mb-8 text-center">
@@ -27,12 +23,18 @@ export default function Home() {
               Elevate your productivity — smart task & project management made effortless.
             </p>
           </div>
-
-          <LoginForm />
-
-          <p className="text-gray-600 mt-2">
-              Do not have account, Please SignUp
-            </p>
+          <div className=" flex-row flex justify-between p-4 items-center">
+            <div className="p-2 flex flex-[1] justify-center">
+              <button className="rounded-3xl bg-blue-300 p-12 text-blue-700 bg-gradient-to-br" onClick={router.navigate('/auth/login')}>
+                Login   
+              </button>
+            </div>
+            <div className="p-2 flex flex-[1] justify-center">
+              <button className="rounded-3xl bg-blue-300 p-12 text-blue-700 bg-gradient-to-br" onClick={router.navigate('/auth/signup')>
+                SignUp
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
