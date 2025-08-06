@@ -9,6 +9,8 @@ import { useState } from 'react';
 import { endpoints } from '@/api/endpoints';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/context/authContext';
+import pomni_login from '../../../asset/images/pomni_login.jpg'
+import Image from 'next/image';
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -35,16 +37,18 @@ export default function Page() {
       setLoading(true);
       setError('');
 
-      const { success } = await signup(data.name, data.email, data.password);
+      const { success, message } = await signup(data.name, data.email, data.password);
 
       if (success) {
-        toast.success("SignUp Successfully");
-
+        toast.success("Sign up successful");
         router.replace('/onboard');
+      } else {
+        toast.error(message || "Signup failed");
+        setError(message);
       }
     } catch (err) {
-      toast.error("SignUp Failed");
-      setError(err.message);
+      toast.error("Something went wrong");
+      setError("Unexpected error occurred");
     } finally {
       setLoading(false);
     }
@@ -53,11 +57,13 @@ export default function Page() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="flex w-full max-w-5xl bg-white rounded-xl shadow-md overflow-hidden">
-        <div className="hidden md:block md:w-1/2">
-          <img
-            src="https://picsum.photos/200/200"
+        <div className="hidden md:block md:w-1/2 relative">
+          <Image
+            src={pomni_login}
             alt="Signup Visual"
-            className="h-full w-full object-cover"
+            fill
+            style={{ objectFit: 'fill' }}
+            priority
           />
         </div>
 

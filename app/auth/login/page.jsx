@@ -10,6 +10,8 @@ import axios from "axios";
 import { useAuth } from "@/context/authContext";
 import toast from "react-hot-toast";
 import LoginForm from "@/components/LoginForm";
+import pokemon from '../../../asset/images/pokemon.png'
+import Image from "next/image";
 
 const schema = z.object({
   email: z.string().email("Invalid email"),

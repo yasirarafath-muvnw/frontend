@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from 'next/navigation';
 import LoginForm from "@/components/LoginForm";
 import pokemon from "@/asset/images/pokemon.png";
 
 export default function Home() {
+  const router = useRouter();
   return (
     <div className="min-h-screen flex">
       <div className="w-1/3 h-screen hidden md:block relative">
@@ -25,18 +27,24 @@ export default function Home() {
           </div>
           <div className=" flex-row flex justify-between p-4 items-center">
             <div className="p-2 flex flex-[1] justify-center">
-              <button className="rounded-3xl bg-blue-300 p-12 text-blue-700 bg-gradient-to-br" onClick={router.navigate('/auth/login')}>
-                Login   
+              <button
+                className="rounded-3xl bg-blue-300 p-12 text-blue-700 bg-gradient-to-br hover:shadow-lg hover:scale-105 transform transition-all duration-300"
+                onClick={() => router.push('/auth/login')}
+              >
+                Login
               </button>
             </div>
             <div className="p-2 flex flex-[1] justify-center">
-              <button className="rounded-3xl bg-blue-300 p-12 text-blue-700 bg-gradient-to-br" onClick={router.navigate('/auth/signup')>
+              <button
+                className="rounded-3xl bg-blue-300 p-12 text-blue-700 bg-gradient-to-br hover:shadow-lg hover:scale-105 transform transition-all duration-300"
+                onClick={() => router.push('/auth/signup')}
+              >
                 SignUp
               </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
