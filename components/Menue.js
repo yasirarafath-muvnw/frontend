@@ -33,19 +33,6 @@ const menuItems = [
         href: "/dashboard/project",
         visible: ["admin", "teacher"],
       },
-
-      //   {
-      //     icon: User,
-      //     label: "Parents",
-      //     href: "/list/parents",
-      //     visible: ["admin", "teacher"],
-      //   },
-      //   {
-      //     icon: Book,
-      //     label: "Subjects",
-      //     href: "/list/subjects",
-      //     visible: ["admin"],
-      //   },
     ],
   },
   {
@@ -57,12 +44,6 @@ const menuItems = [
         href: "/dashboard/profile",
         visible: ["admin", "teacher", "student", "parent"],
       },
-      //   {
-      //     icon: Settings,
-      //     label: "Settings",
-      //     href: "/settings",
-      //     visible: ["admin", "teacher", "student", "parent"],
-      //   },
       {
         icon: LogOut,
         label: "Logout",
@@ -85,11 +66,13 @@ export default function Menue({ triggerLogoutModal }) {
             const Icon = item.icon;
             const isLogout = item.label.toLowerCase() === "logout";
 
+            const hoverClasses = "hover:bg-gray-100 hover:text-amber-500 transition-colors duration-200 rounded-md px-2";
+
             return isLogout ? (
               <button
                 key={itemIdx}
                 onClick={triggerLogoutModal}
-                className="flex items-center gap-2 py-2 hover:text-amber-500 justify-center lg:justify-start w-full text-left"
+                className={`flex items-center gap-2 py-2 justify-center lg:justify-start w-full text-left ${hoverClasses}`}
               >
                 <Icon size={20} color="black" />
                 <span className="text-black hidden lg:block">{item.label}</span>
@@ -98,7 +81,7 @@ export default function Menue({ triggerLogoutModal }) {
               <Link
                 href={item.href}
                 key={itemIdx}
-                className="flex items-center gap-2 py-2 hover:text-amber-500 justify-center lg:justify-start"
+                className={`flex items-center gap-2 py-2 justify-center lg:justify-start w-full ${hoverClasses}`}
               >
                 <Icon size={20} color="black" />
                 <span className="text-black hidden lg:block">{item.label}</span>

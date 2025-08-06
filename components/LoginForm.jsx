@@ -58,7 +58,7 @@ export default function LoginForm() {
           type="email"
           {...register("email")}
           className="w-full border text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md px-3 py-2 mt-1"
-          placeholder="you@example.com"
+          placeholder="Enter your Email"
         />
         {errors.email && (
           <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -71,7 +71,7 @@ export default function LoginForm() {
           type="password"
           {...register("password")}
           className="w-full border text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md px-3 py-2 mt-1"
-          placeholder="••••••••"
+          placeholder="********"
         />
         {errors.password && (
           <p className="text-red-500 text-sm">{errors.password.message}</p>
