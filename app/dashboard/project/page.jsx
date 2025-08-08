@@ -41,6 +41,7 @@ function Projects() {
     };
 
     const fetchProjects = async () => {
+
       try {
         const res = await axios.get('http://localhost:3000/api/projects', {
           headers: {
@@ -50,10 +51,13 @@ function Projects() {
 
         console.log('projects', res?.data);
 
+        console.log('projects', res?.data);
 
 
 
         setProjects(res.data);
+
+
       } catch (err) {
         console.log('Failed to fetch projects:', err);
       }
@@ -125,8 +129,10 @@ function Projects() {
     }
   };
 
-
-  console.log("Type:", typeof projects);
+  const getUserNameById = (id) => {
+    const user = users.find((u) => u._id === id);
+    return user ? user.name : 'Unknown User';
+  };
 
   return (
     <div className="bg-amber-100 min-h-screen p-4 text-black">
@@ -234,41 +240,92 @@ function Projects() {
         </div>
       )}
 
-      {/* Project List */}
-      {projects ? (
-        projects.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {projects.map((project) => {
-              const memberNames = users
-                .filter((user) => project.members.includes(user._id))
-                .map((user) => user.name)
-                .join(', ');
 
-              return (
-                <div
-                  key={project._id}
-                  className="bg-white text-black p-4 rounded shadow"
-                >
-                  <h3 className="text-xl font-bold mb-2">{project.name}</h3>
-                  <p className="mb-2 text-gray-700">{project.description}</p>
-                  <div className="text-sm text-gray-600 mb-2">
-                    <p>Status: <span className="font-medium">{project.status}</span></p>
-                    <p>Priority: <span className="font-medium">{project.priority}</span></p>
-                    <p>Duration: {project.startDate} → {project.endDate}</p>
-                    <p>Members: {memberNames || 'None'}</p>
-                  </div>
+
+      <div className='flex-col w-full bg-white'>
+        <div className='flex-row gap-2 flex justify-between mb-1 bg-blue-300 p-3'>
+          <p className='flex-[1]' >Name</p>
+          <p className='flex-[1]' >Description</p>
+          <p className='flex-[1]' >Status</p>
+          <p className='flex-[1]' >Priority</p>
+          <p className='flex-[1]' >Members</p>
+          <p className='flex-[1]' >StartDate</p>
+          <p className='flex-[1]' >EndDate</p>
+        </div>
+
+        {projects.map((item) => {
+          return (
+            <div
+              key={item._id}
+              className="flex-row gap-2 flex justify-between py-3 bg-blue-400 p-3"
+            >
+              <p className='flex-[1]'>{item.name}</p>
+              <p className='flex-[1]'>{item.description}</p>
+              <p className='flex-[1]'>{item.status}</p>
+              <p className='flex-[1]'>{item.priority}</p>
+              <select
+                name="priority"
+                value={form.priority}
+                // onChange={handleInputChange}
+                className="w-full p-2 border rounded text-black flex-[1]"
+              >
+                {item.members.map((item) => <div>
+                  <p>
+                    <option value={getUserNameById(item)}>{getUserNameById(item)}</option>
+
+                  </p>
+                </div>)}
+              </select>
+              <p className='flex-[1]'>{new Date(item.startDate).toLocaleDateString()}</p>
+              <p className='flex-[1]'>{new Date(item.endDate).toLocaleDateString()}</p>
+            </div>
+          );
+        })}
+
+
+      </div>
+
+
+      <table className="w-full bg-white rounded shadow">
+        <thead className="bg-blue-300 text-left">
+          <tr>
+            <th className="p-3">Name</th>
+            <th className="p-3">Description</th>
+            <th className="p-3">Status</th>
+            <th className="p-3">Priority</th>
+            <th className="p-3">Members</th>
+            <th className="p-3">Start Date</th>
+            <th className="p-3">End Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {projects.map((project) => (
+            <tr key={project._id} className="border-t hover:bg-blue-50">
+              <td className="p-3">{project.name}</td>
+              <td className="p-3">{project.description}</td>
+              <td className="p-3 capitalize">{project.status}</td>
+              <td className="p-3 capitalize">{project.priority}</td>
+              <td className="p-3">
+                <div className="flex flex-col gap-1">
+                  {project.members.map((memberId) => {
+                    const user = users.find((u) => u._id === memberId);
+                    return (
+                      <div key={memberId} className="flex items-center gap-2">
+                        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500 text-white text-xs font-bold">
+                          {user?.name?.charAt(0) || "?"}
+                        </div>
+                        <span>{user?.name || "Unknown User"}</span>
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })}
-          </div>
-        ) : (
-          <p>No projects found.</p>
-        )
-      ) : (
-        <p>Loading...</p>
-      )}
-
-
+              </td>
+              <td className="p-3">{new Date(project.startDate).toLocaleDateString()}</td>
+              <td className="p-3">{new Date(project.endDate).toLocaleDateString()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
 
   );
