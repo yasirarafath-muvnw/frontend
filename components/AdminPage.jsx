@@ -8,10 +8,10 @@ const Adminpage = () => {
                 <div className="w-full lg:w-2/3">
                     {/* USER CARDS */}
                     <div className="flex flex-col md:flex-row gap-4">
-                        <UserCard type='Projects' />
-                        <UserCard type='Tasks' />
-                        <UserCard type='Reports' />
-                        <UserCard type='Issues' />
+                        <UserCard type='Projects' count={0} />
+                        <UserCard type='Tasks' count={2} />
+                        <UserCard type='Reports' count={4} />
+                        <UserCard type='Issues' count={3} />
                     </div>
                     <div>
                         {/* <CountChart /> */}

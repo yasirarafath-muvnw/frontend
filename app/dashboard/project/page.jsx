@@ -1,5 +1,6 @@
 "use client";
 
+import { GetAllProjects, GetAllUsers } from '@/api/queries/user';
 import { useAuth } from '@/context/authContext';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
@@ -26,15 +27,14 @@ function Projects() {
 
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/users', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const { data } = await GetAllUsers();
 
-        console.log('users', response?.data?.users);
+        console.log('users', data?.users);
+        setUsers(data?.users);
 
-        setUsers(response.data.users);
+        // console.log('users', response?.data?.users);
+        // setUsers(response.data.users);
+
       } catch (error) {
         console.log('err', error);
       }
@@ -43,20 +43,14 @@ function Projects() {
     const fetchProjects = async () => {
 
       try {
-        const res = await axios.get('http://localhost:3000/api/projects', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const { data } = await GetAllProjects();
 
-        console.log('projects', res?.data);
+        console.log('projects', data);
+        setProjects(data);
 
-        console.log('projects', res?.data);
-
-
-
-        setProjects(res.data);
-
+        // console.log('projects', res?.data);
+        // console.log('projects', res?.data);
+        // setProjects(res.data);
 
       } catch (err) {
         console.log('Failed to fetch projects:', err);
@@ -150,99 +144,113 @@ function Projects() {
 
       {/* Project Modal */}
       {projectModal && (
-        <div className="bg-white shadow p-4 rounded-lg mb-6 text-black">
-          <h2 className="text-xl font-semibold mb-3">Add Project</h2>
+        <div className="fixed inset-4 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white shadow-lg p-6 rounded-lg w-full max-w-3xl text-black relative">
+            {/* Close button */}
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+              onClick={() => setProjectModal(false)}
+            >
+              ✕
+            </button>
 
-          <input
-            type="text"
-            name="name"
-            placeholder="Project Name"
-            value={form.name}
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded mb-2 text-black"
-          />
-          <textarea
-            name="description"
-            placeholder="Description"
-            value={form.description}
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded mb-2 text-black"
-          ></textarea>
+            <h2 className="text-xl font-semibold mb-3">Add Project</h2>
 
-          <select
-            name="status"
-            value={form.status}
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded mb-2 text-black"
-          >
-            <option value="">Select Status</option>
-            <option value="pending">Pending</option>
-            <option value="in-progress">In Progress</option>
-            <option value="completed">Completed</option>
-            <option value="on-hold">On Hold</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-
-          <select
-            name="priority"
-            value={form.priority}
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded mb-2 text-black"
-          >
-            <option value="">Select Priority</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-            <option value="urgent">Urgent</option>
-          </select>
-
-          <div className="grid grid-cols-2 gap-4 mb-2">
             <input
-              type="date"
-              name="startDate"
-              value={form.startDate}
+              type="text"
+              name="name"
+              placeholder="Project Name"
+              value={form.name}
               onChange={handleInputChange}
-              className="p-2 border rounded text-black"
+              className="w-full p-2 border rounded mb-2 text-black"
             />
-            <input
-              type="date"
-              name="endDate"
-              value={form.endDate}
+            <textarea
+              name="description"
+              placeholder="Description"
+              value={form.description}
               onChange={handleInputChange}
-              className="p-2 border rounded text-black"
-            />
-          </div>
+              className="w-full p-2 border rounded mb-2 text-black"
+            ></textarea>
 
-          <div className="mb-4">
-            <p className="font-medium mb-2">Select Members:</p>
-            <div className="grid grid-cols-2 gap-2 text-black">
-              {users.map((user) => (
-                <label key={user._id} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={form.members.includes(user._id)}
-                    onChange={() => handleMemberToggle(user._id)}
-                  />
-                  <span>{user.name}</span>
-                </label>
-              ))}
+            <select
+              name="status"
+              value={form.status}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded mb-2 text-black"
+            >
+              <option value="">Select Status</option>
+              <option value="pending">Pending</option>
+              <option value="in-progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="on-hold">On Hold</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+
+            <select
+              name="priority"
+              value={form.priority}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded mb-2 text-black"
+            >
+              <option value="">Select Priority</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="urgent">Urgent</option>
+            </select>
+
+            <div className="grid grid-cols-2 gap-4 mb-2">
+              <input
+                type="date"
+                name="startDate"
+                value={form.startDate}
+                onChange={handleInputChange}
+                className="p-2 border rounded text-black"
+              />
+              <input
+                type="date"
+                name="endDate"
+                value={form.endDate}
+                onChange={handleInputChange}
+                className="p-2 border rounded text-black"
+              />
             </div>
-          </div>
 
-          <div className="flex justify-end gap-2">
-            <button className="bg-gray-300 px-4 py-2 rounded text-black" onClick={() => setProjectModal(false)}>
-              Cancel
-            </button>
-            <button className="bg-green-500 text-white px-4 py-2 rounded" onClick={handleAddProject}>
-              Save
-            </button>
+            <div className="mb-4">
+              <p className="font-medium mb-2">Select Members:</p>
+              <div className="grid grid-cols-2 gap-2 text-black">
+                {users.map((user) => (
+                  <label key={user._id} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={form.members.includes(user._id)}
+                      onChange={() => handleMemberToggle(user._id)}
+                    />
+                    <span>{user.name}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2">
+              <button
+                className="bg-gray-300 px-4 py-2 rounded text-black"
+                onClick={() => setProjectModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-green-500 text-white px-4 py-2 rounded"
+                onClick={handleAddProject}
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-
-
-      <div className='flex-col w-full bg-white'>
+      {/* <div className='flex-col w-full bg-white'>
         <div className='flex-row gap-2 flex justify-between mb-1 bg-blue-300 p-3'>
           <p className='flex-[1]' >Name</p>
           <p className='flex-[1]' >Description</p>
@@ -281,10 +289,7 @@ function Projects() {
             </div>
           );
         })}
-
-
-      </div>
-
+      </div> */}
 
       <table className="w-full bg-white rounded shadow">
         <thead className="bg-blue-300 text-left">
