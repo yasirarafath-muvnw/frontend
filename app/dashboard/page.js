@@ -8,20 +8,6 @@ import { useEffect } from "react";
 export default function DashboardPage() {
   const { user, accessToken } = useAuth();
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      const { data : allTask } = await GetAllTasks();
-      const { data : allUser } = await GetAllUsers();
-      const { data : allProject } = await GetAllProjects();
-
-      console.log('allTask', allTask.length);
-      console.log('allUser', allUser.users.length);
-      console.log('allProject', allProject.length);
-
-
-    };
-    fetchTasks();
-  }, [])
 
   useEffect(() => {
     if (user) {

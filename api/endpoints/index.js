@@ -18,6 +18,7 @@ export const endpoints = {
   },
 
   task: {
-    getAll: `/api/tasks`
+    getAll: `/api/tasks`,
+    post: `/api/tasks`,
   }
 };
