@@ -14,8 +14,8 @@ const Adminpage = () => {
                 project: allProject?.length || 0,
                 task: allTask?.length || 0,
                 user: allUser?.users?.length || 0,
-                report: 0, // placeholder until real API
-                issue: 0,  // placeholder until real API
+                report: 0, 
+                issue: 0,
             });
             console.log('allTask', allTask.length);
             console.log('allUser', allUser.users.length);
