@@ -1,7 +1,7 @@
 export const endpoints = {
   auth: {
-    signUp: "http://localhost:3000/api/auth/signup",
-    login: "http://localhost:3000/api/auth/login",
+    signUp: "/api/auth/signup",
+    login: "/api/auth/login",
   },
 
   user: {
