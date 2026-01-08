@@ -7,6 +7,8 @@ import { Modal, Box, Typography, TextField, MenuItem, Button, Checkbox, FormCont
 import { toast } from 'sonner';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import axiosInstance from '@/api/axios';
+import { endpoints } from '@/api/endpoints';
 
 const modalStyle = {
   position: 'absolute',
@@ -107,8 +109,8 @@ function Projects() {
     console.log('accessToken', accessToken);
 
     try {
-      const response = await axios.post(
-        'http://localhost:3000/api/projects',
+      const response = await axiosInstance.post(
+        endpoints.project.getAll,
         payload,
         {
           headers: {

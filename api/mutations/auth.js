@@ -13,6 +13,6 @@ export const signUpUser = async (data) => {
 };
 
 export const loginUser = async (data) => {
-  const response = await axios.post(endpoints.auth.login, data);
+  const response = await axiosInstance.post(endpoints.auth.login, data);
   return response.data;
 };

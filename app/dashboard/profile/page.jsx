@@ -59,8 +59,8 @@ export default function ProfilePage() {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      await axios.put(
-        `http://localhost:3000/api/user/${user?.id}`,
+      await axiosInstance.put(
+        endpoints.user.update(user?.id),
         data,
         {
           headers: {

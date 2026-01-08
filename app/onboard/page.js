@@ -8,6 +8,7 @@ import { endpoints } from "@/api/endpoints";
 import { toast } from "react-hot-toast";
 import profileBg from "@/asset/images/pokemon.png";
 import Image from "next/image";
+import axiosInstance from "@/api/axios";
 
 export default function OnboardPage() {
   const { user, accessToken } = useAuth();
@@ -56,10 +57,10 @@ export default function OnboardPage() {
         const formDataUpload = new FormData();
         formDataUpload.append("file", file);
 
-        await axios.post('http://localhost:3000/api/user/upload', formDataUpload, {
+        await axiosInstance.post(endpoints.user.uploadProfilePic, formDataUpload, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
+            "Content-Type": "multipart/form-data",
           },
         });
 
@@ -69,8 +70,8 @@ export default function OnboardPage() {
       }
 
       // Submit User Profile
-      const response = await axios.post(
-        'http://localhost:3000/api/user',
+      const response = await axiosInstance.post(
+        endpoints.user.create,
         {
           firstName: formData.firstName,
           lastName: formData.lastName,

@@ -6,7 +6,7 @@ export const endpoints = {
 
   user: {
     create: "api/user",
-    update: (id) => `api/user/${id}`,
+    update: (id) => `/api/user/${id}`,
     delete: (id) => `api/user/${id}`,
     get: (id) => `api/user/${id}`,
     uploadProfilePic: "api/user/upload",
