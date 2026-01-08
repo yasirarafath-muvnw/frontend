@@ -22,6 +22,7 @@ export default function DashboardPage() {
     <div>
       <h2 className="text-2xl font-bold mb-4 text-black">Welcome {user ? user.name : null}!</h2>
       <Adminpage />
+      <Adminpage />
     </div>
   );
 }
