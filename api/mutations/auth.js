@@ -1,10 +1,11 @@
 
 import axios from "axios";
 import { endpoints } from "../endpoints";
+import axiosInstance from "../axios";
 
 
 export const signUpUser = async (data) => {
-  const res = await axios.post(endpoints.auth.signUp, data);
+  const res = await axiosInstance.post(endpoints.auth.signUp, data);
   return {
     accessToken: res.data.accessToken,
     user: res.data.user,
