@@ -20,5 +20,7 @@ export const endpoints = {
   task: {
     getAll: `/api/tasks`,
     post: `/api/tasks`,
+    updateTaskStatus: (id) => `/api/tasks/${id}`,
+    deleteTaskById: (id) => `/api/tasks/${id}`
   }
 };

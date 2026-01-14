@@ -10,3 +10,23 @@ export const PostTask = async (payload) => {
         return error;
     }
 }
+
+export const UpdateTaskStatus = async (id, payload) => {
+    try {
+        const response = await axiosInstance.put(endpoints.task.updateTaskStatus(id), payload);
+        return response;
+    } catch (error) {
+        console.log('error update task', error);
+        throw error;
+    }
+}
+
+export const DeleteTaskById = async (id) => {
+    try {
+        const response = await axiosInstance.delete(endpoints.task.deleteTaskById(id));
+        return response;
+    } catch (error) {
+        console.log('error update task', error);
+        throw error;
+    }
+}

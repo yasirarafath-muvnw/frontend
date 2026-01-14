@@ -141,10 +141,6 @@ function Projects() {
     }
   };
 
-  const getUserNameById = (id) => {
-    const user = users.find((u) => u._id === id);
-    return user ? user.name : 'Unknown User';
-  };
 
   return (
     <div className="bg-amber-100 min-h-screen p-4 text-black">

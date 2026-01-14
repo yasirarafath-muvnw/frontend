@@ -7,10 +7,11 @@ import { toast } from "sonner";
 
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  Paper, Button, Modal, Box, Typography, TextField, MenuItem, FormControlLabel, Checkbox
+  Paper, Button, Modal, Box, Typography, TextField, MenuItem, IconButton, FormControlLabel, Checkbox
 } from "@mui/material";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import axiosInstance from "@/api/axios";
-import { PostTask } from "@/api/mutations/user";
+import { DeleteTaskById, PostTask, UpdateTaskStatus } from "@/api/mutations/user";
 
 const modalStyle = {
   position: "absolute",
@@ -88,6 +89,45 @@ export default function Task() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleUpdateTaskStatus = async (taskId, newStatus) => {
+    const previousTasks = tasks;
+    setTasks((prev) =>
+      prev.map((task) =>
+        task._id === taskId ? { ...task, status: newStatus } : task
+      )
+    );
+
+    try {
+      await UpdateTaskStatus(taskId, { status: newStatus });
+      toast.success("Task status updated");
+    } catch (err) {
+      toast.error("Failed to update status");
+      setTasks(previousTasks);
+    }
+  };
+
+  const handleDeleteTask = async (taskId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this task? This action cannot be undone."
+    );
+
+    if (!confirmDelete) return;
+
+    const previousTasks = tasks;
+
+    // Optimistic UI update
+    setTasks((prev) => prev.filter((task) => task._id !== taskId));
+
+    try {
+      await DeleteTaskById(taskId);
+      toast.success("Task deleted successfully");
+    } catch (error) {
+      toast.error("Failed to delete task");
+      // rollback if failed
+      setTasks(previousTasks);
+    }
+  };
+
   const handleAddTask = async () => {
     if (!form.name || !form.status || !form.project || !form.assignedTo) {
       toast.error("Please fill all required fields");
@@ -130,22 +170,42 @@ export default function Task() {
           <TableHead sx={{ bgcolor: "primary.main" }}>
             <TableRow>
               <TableCell sx={{ color: "white" }}>Name</TableCell>
-              <TableCell sx={{ color: "white" }}>Description</TableCell>
+              {/* <TableCell sx={{ color: "white" }}>Description</TableCell> */}
               <TableCell sx={{ color: "white" }}>project</TableCell>
               <TableCell sx={{ color: "white" }}>Status</TableCell>
               <TableCell sx={{ color: "white" }}>Created By</TableCell>
               <TableCell sx={{ color: "white" }}>Assigned To</TableCell>
               <TableCell sx={{ color: "white" }}>Created Date</TableCell>
               <TableCell sx={{ color: "white" }}>Last Updated</TableCell>
+              <TableCell sx={{ color: "white" }}>Actions</TableCell>
+
             </TableRow>
           </TableHead>
           <TableBody>
             {tasks.map((task) => (
               <TableRow key={task._id} hover>
                 <TableCell>{task.title}</TableCell>
-                <TableCell>{task.description}</TableCell>
+                {/* <TableCell>{task.description}</TableCell> */}
                 <TableCell>{task?.project?.name}</TableCell>
-                <TableCell sx={{ textTransform: "capitalize" }}>{task.status}</TableCell>
+                <TableCell>
+                  <TextField
+                    select
+                    size="small"
+                    value={task.status}
+                    onChange={(e) => handleUpdateTaskStatus(task._id, e.target.value)}
+                    sx={{
+                      minWidth: 80,
+                      "& .MuiSelect-select": {
+                        padding: "4px 8px",
+                        fontSize: "14px",
+                      },
+                    }}
+                  >
+                    <MenuItem value="pending" sx={{ fontSize: 12, minHeight: 28 }} >Pending</MenuItem>
+                    <MenuItem value="in-progress" sx={{ fontSize: 12, minHeight: 28 }} >In Progress</MenuItem>
+                    <MenuItem value="completed" sx={{ fontSize: 12, minHeight: 28 }} >Completed</MenuItem>
+                  </TextField>
+                </TableCell>
                 <TableCell>
                   {task.createdBy?.name || "Unknown"}
                 </TableCell>
@@ -154,6 +214,14 @@ export default function Task() {
                 </TableCell>
                 <TableCell>{new Date(task.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell>{new Date(task.updatedAt).toLocaleDateString()}</TableCell>
+                <TableCell>
+                  <IconButton
+                    color="error"
+                    onClick={() => handleDeleteTask(task._id)}
+                  >
+                    <DeleteOutlineIcon />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
