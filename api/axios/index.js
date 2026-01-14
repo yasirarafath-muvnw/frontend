@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://pomni-server.onrender.com/", // http://localhost:3000/
+  baseURL: "http://localhost:5000/", // http://localhost:3000/ https://pomni-server.onrender.com/
   headers: {
     "Content-Type": "application/json",
   },

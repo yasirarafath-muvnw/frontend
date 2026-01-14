@@ -1,6 +1,6 @@
 "use client";
 
-import { GetAllTasks, GetAllUsers } from "@/api/queries/user";
+import { GetAllProjects, GetAllTasks, GetAllUsers } from "@/api/queries/user";
 import { useAuth } from "@/context/authContext";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -28,6 +28,7 @@ export default function Task() {
   const { accessToken } = useAuth();
   const [users, setUsers] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [taskModal, setTaskModal] = useState(false);
 
   const [form, setForm] = useState({
@@ -35,6 +36,7 @@ export default function Task() {
     description: "",
     status: "",
     assignedTo: "",
+    project: ""
   });
 
   useEffect(() => {
@@ -64,13 +66,30 @@ export default function Task() {
     fetchUsers();
   }, [accessToken]);
 
+  useEffect(() => {
+    if (!accessToken) return;
+
+    const fetchProjects = async () => {
+      try {
+        const { data } = await GetAllProjects();
+        console.log('projects----------------', data);
+
+        setProjects(data);
+      } catch (err) {
+        console.log('Failed to fetch projects:', err);
+      }
+    };
+
+    fetchProjects();
+  }, [accessToken]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleAddTask = async () => {
-    if (!form.name || !form.status || !form.assignedTo) {
+    if (!form.name || !form.status || !form.project || !form.assignedTo) {
       toast.error("Please fill all required fields");
       return;
     }
@@ -79,26 +98,18 @@ export default function Task() {
       title: form.name,
       description: form.description,
       status: form.status,
-      assignedTo: form.assignedTo
+      assignedTo: form.assignedTo,
+      project: form.project,
     };
 
     const { data } = await PostTask(taskPayload);
 
     console.log('data', data);
 
-    setTasks((prev) => [
-      ...prev,
-      {
-        _id: data._id || Date.now().toString(),
-        ...taskPayload,
-        createdBy: data.createdBy || "You",
-        createdAt: data.createdAt || new Date().toISOString(),
-        updatedAt: data.updatedAt || new Date().toISOString(),
-      },
-    ]);
+    setTasks((prev) => [...prev, data]);
     toast.success("Task added successfully");
     setTaskModal(false);
-    setForm({ name: "", description: "", status: "", assignedTo: "" });
+    setForm({ name: "", description: "", status: "", assignedTo: "", project: "" });
   };
 
   return (
@@ -120,6 +131,7 @@ export default function Task() {
             <TableRow>
               <TableCell sx={{ color: "white" }}>Name</TableCell>
               <TableCell sx={{ color: "white" }}>Description</TableCell>
+              <TableCell sx={{ color: "white" }}>project</TableCell>
               <TableCell sx={{ color: "white" }}>Status</TableCell>
               <TableCell sx={{ color: "white" }}>Created By</TableCell>
               <TableCell sx={{ color: "white" }}>Assigned To</TableCell>
@@ -132,12 +144,13 @@ export default function Task() {
               <TableRow key={task._id} hover>
                 <TableCell>{task.title}</TableCell>
                 <TableCell>{task.description}</TableCell>
+                <TableCell>{task?.project?.name}</TableCell>
                 <TableCell sx={{ textTransform: "capitalize" }}>{task.status}</TableCell>
                 <TableCell>
-                  {users.find((user) => user._id === task.createdBy)?.name || "Unknown"}
+                  {task.createdBy?.name || "Unknown"}
                 </TableCell>
                 <TableCell>
-                  {users.find((user) => user._id === task.assignedTo)?.name || "Unknown"}
+                  {task.assignedTo?.name || "Unknown"}
                 </TableCell>
                 <TableCell>{new Date(task.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell>{new Date(task.updatedAt).toLocaleDateString()}</TableCell>
@@ -177,6 +190,23 @@ export default function Task() {
             onChange={handleInputChange}
             sx={{ mb: 2 }}
           />
+
+          <TextField
+            fullWidth
+            select
+            label="Project"
+            name="project"
+            value={form.project}
+            onChange={handleInputChange}
+            sx={{ mb: 2 }}
+          >
+            <MenuItem value="">Select Project</MenuItem>
+            {projects.map((project) => (
+              <MenuItem key={project._id} value={project._id}>
+                {project.name}
+              </MenuItem>
+            ))}
+          </TextField>
 
           <TextField
             fullWidth
