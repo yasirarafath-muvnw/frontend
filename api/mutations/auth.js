@@ -9,6 +9,7 @@ export const signUpUser = async (data) => {
   return {
     accessToken: res.data.accessToken,
     user: res.data.user,
+    role: res.data.role,
   };
 };
 

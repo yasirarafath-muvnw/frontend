@@ -9,6 +9,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const router = useRouter();
   const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
   const [accessToken, setAccessToken] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -22,6 +23,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
+        setRole(parsedUser.role || "USER");
       } catch (err) {
         console.warn("Failed to parse stored user:", err);
         sessionStorage.removeItem("user");
@@ -41,6 +43,7 @@ export const AuthProvider = ({ children }) => {
 
       setAccessToken(token);
       setUser(user);
+      setRole(user.role || "USER");
 
       router.replace("/dashboard");
     } catch (err) {
@@ -52,13 +55,14 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (name, email, password) => {
     try {
-      const { accessToken: token, user } = await signUpUser({ name, email, password });
+      const { accessToken: token, user, role } = await signUpUser({ name, email, password });
 
       sessionStorage.setItem("accessToken", token);
       sessionStorage.setItem("user", JSON.stringify(user));
 
       setAccessToken(token);
       setUser(user);
+      setRole(user.role || "USER");
 
       return { success: true };
     } catch (err) {
@@ -72,12 +76,13 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.removeItem("user");
     setAccessToken("");
     setUser(null);
+    setRole(null);
     router.replace("/auth/login");
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, accessToken, loading, login, signup, logout }}
+      value={{ user, role, accessToken, loading, login, signup, logout }}
     >
       {children}
     </AuthContext.Provider>

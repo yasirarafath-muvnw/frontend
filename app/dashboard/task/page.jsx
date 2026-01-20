@@ -26,11 +26,14 @@ const modalStyle = {
 };
 
 export default function Task() {
-  const { accessToken } = useAuth();
+  const { accessToken, role } = useAuth();
   const [users, setUsers] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
   const [taskModal, setTaskModal] = useState(false);
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState(null);
 
   const [form, setForm] = useState({
     name: "",
@@ -106,25 +109,25 @@ export default function Task() {
     }
   };
 
-  const handleDeleteTask = async (taskId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this task? This action cannot be undone."
-    );
-
-    if (!confirmDelete) return;
+  const handleDeleteTask = async () => {
+    if (!taskToDelete) return;
 
     const previousTasks = tasks;
 
     // Optimistic UI update
-    setTasks((prev) => prev.filter((task) => task._id !== taskId));
+    setTasks((prev) =>
+      prev.filter((task) => task._id !== taskToDelete)
+    );
 
     try {
-      await DeleteTaskById(taskId);
+      await DeleteTaskById(taskToDelete);
       toast.success("Task deleted successfully");
     } catch (error) {
       toast.error("Failed to delete task");
-      // rollback if failed
-      setTasks(previousTasks);
+      setTasks(previousTasks); // rollback
+    } finally {
+      setShowDeleteModal(false);
+      setTaskToDelete(null);
     }
   };
 
@@ -160,7 +163,7 @@ export default function Task() {
 
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <Typography variant="h6" sx={{ color: 'black' }}>Task List</Typography>
-        <Button variant="contained" color="primary" onClick={() => setTaskModal(true)}>
+        <Button variant="contained" color="primary" disabled={role === "USER"} onClick={() => setTaskModal(true)}>
           Add Task
         </Button>
       </Box>
@@ -217,7 +220,11 @@ export default function Task() {
                 <TableCell>
                   <IconButton
                     color="error"
-                    onClick={() => handleDeleteTask(task._id)}
+                    disabled={role === "USER"}
+                    onClick={() => {
+                      setTaskToDelete(task._id);
+                      setShowDeleteModal(true);
+                    }}
                   >
                     <DeleteOutlineIcon />
                   </IconButton>
@@ -319,6 +326,43 @@ export default function Task() {
           </Box>
         </Box>
       </Modal>
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">
+            <h2 className="text-lg font-semibold text-gray-800">
+              Confirm Delete
+            </h2>
+
+            <p className="text-gray-600 mt-2">
+              Are you sure you want to delete this task?
+              <br />
+              <span className="text-red-600 font-medium">
+                This action cannot be undone.
+              </span>
+            </p>
+
+            <div className="mt-6 flex justify-end space-x-4">
+              <button
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setTaskToDelete(null);
+                }}
+                className="px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded hover:bg-gray-300 transition-colors"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={handleDeleteTask}
+                className="px-4 py-2 bg-red-600 text-white font-medium rounded hover:bg-red-700 transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

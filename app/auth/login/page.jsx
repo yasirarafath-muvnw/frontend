@@ -32,24 +32,24 @@ export default function Page() {
     resolver: zodResolver(schema),
   });
 
-  const notify = () => toast.success("LoggedIn Successfully");
-  const errornotify = () => toast.error("Error Logging In User");
+  // const notify = () => toast.success("LoggedIn Successfully");
+  // const errornotify = () => toast.error("Error Logging In User");
 
-  const onSubmit = async (data) => {
-    setLoading(true);
-    setError("");
+  // const onSubmit = async (data) => {
+  //   setLoading(true);
+  //   setError("");
 
-    try {
-      await login(data.email, data.password);
-      notify();
-    } catch (err) {
-      console.log("err", err);
-      setError(err.message);
-      errornotify(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //   try {
+  //     await login(data.email, data.password);
+  //     notify();
+  //   } catch (err) {
+  //     console.log("err", err);
+  //     setError(err.message);
+  //     errornotify(err.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className="min-h-screen flex">

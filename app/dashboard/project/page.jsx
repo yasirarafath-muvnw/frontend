@@ -25,7 +25,7 @@ const modalStyle = {
 };
 
 function Projects() {
-  const { accessToken } = useAuth();
+  const { accessToken, role } = useAuth();
   const [users, setUsers] = useState([]);
   const [projects, setProjects] = useState([]);
   const [projectModal, setProjectModal] = useState(false);
@@ -149,14 +149,14 @@ function Projects() {
       <div className="flex justify-between items-center mb-4">
         <p>Project List</p>
         <button
-          className="bg-sky-500 text-white px-4 py-2 rounded"
+          className="bg-sky-500 text-white px-4 py-2 rounded disabled:opacity-50"
+          disabled={role === "USER"}
           onClick={() => setProjectModal(true)}
         >
           Add Project
         </button>
       </div>
 
-      {/* Project Modal */}
       <Modal
         open={projectModal}
         onClose={() => setProjectModal(false)}
@@ -265,7 +265,7 @@ function Projects() {
             <Button variant="outlined" onClick={() => setProjectModal(false)}>
               Cancel
             </Button>
-            <Button variant="contained" color="success" onClick={handleAddProject}>
+            <Button variant="contained" color="success" disabled={role === "USER"} onClick={handleAddProject}>
               Save
             </Button>
           </Box>

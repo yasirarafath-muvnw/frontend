@@ -36,15 +36,16 @@ export default function LoginForm() {
     setLoading(true);
     setError("");
 
-    console.log('data -> ', data.email, data.password);
-
     try {
       await login(data.email, data.password);
-      notify();
+      toast.success("Logged in successfully");
     } catch (err) {
       console.log("err", err);
-      setError(err.message);
-      errornotify(err.message);
+
+      // Use err.response?.data?.message if coming from axios
+      const message = err?.response?.data?.message || err.message || "Error logging in";
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
