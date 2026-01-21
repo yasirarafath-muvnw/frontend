@@ -30,3 +30,13 @@ export const DeleteTaskById = async (id) => {
         throw error;
     }
 }
+
+export const UpdateUser = async (id, payload) => {
+    try {
+        const response = await axiosInstance.put(endpoints.user.update(id), payload);
+        return response.data;
+    } catch (error) {
+        console.error("error update user", error);
+        throw error;
+    }
+}

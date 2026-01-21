@@ -8,6 +8,7 @@ import { GetUserDetails } from "@/api/queries/user";
 import { useAuth } from "@/context/authContext";
 import { Pencil } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { UpdateUser } from "@/api/mutations/user";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null);
@@ -59,15 +60,16 @@ export default function ProfilePage() {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      await axiosInstance.put(
-        endpoints.user.update(user?.id),
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      // await axiosInstance.put(
+      //   endpoints.user.update(user?.id),
+      //   data,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${accessToken}`,
+      //     },
+      //   }
+      // );
+      await UpdateUser(user?.id, data);
 
       alert("Profile updated successfully");
       setEditMode(false);
