@@ -1,0 +1,67 @@
+src/
+├── app/
+│   ├── layout.js
+│   ├── page.js                # Landing (your Pokemon page)
+│   ├── auth/
+│   │   ├── layout.js          # Auth layout (optional)
+│   │   ├── login/
+│   │   │   └── page.js
+│   │   └── signup/
+│   │       └── page.js
+│   ├── dashboard/
+│   │   ├── layout.js          # Sidebar + Topbar
+│   │   ├── page.js            # Dashboard home
+│   │   ├── profile/
+│   │   │   └── page.js
+│   │   ├── project/
+│   │   │   └── page.js
+│   │   └── task/
+│   │       └── page.js
+│
+├── components/
+│   ├── layout/
+│   │   ├── DashboardLayout.jsx
+│   │   ├── Sidebar.jsx
+│   │   └── Topbar.jsx
+│   │
+│   ├── auth/
+│   │   ├── LoginForm.jsx
+│   │   └── SignupForm.jsx
+│   │
+│   ├── common/
+│   │   ├── Page.jsx
+│   │   ├── Loader.jsx
+│   │   └── EmptyState.jsx
+│   │
+│   └── Providers.jsx
+│
+├── features/
+│   ├── auth/
+│   │   ├── auth.api.js
+│   │   ├── auth.queries.js
+│   │   └── auth.types.js
+│   │
+│   ├── task/
+│   │   ├── task.api.js
+│   │   ├── task.queries.js
+│   │   └── task.types.js
+│   │
+│   ├── user/
+│   │   ├── user.api.js
+│   │   └── user.queries.js
+│
+├── context/
+│   ├── authContext.js
+│   └── userContext.js
+│
+├── lib/
+│   ├── axios.js
+│   ├── endpoints.js
+│   └── queryClient.js
+│
+├── assets/
+│   └── images/
+│       └── pokemon.png
+│
+├── styles/
+│   └── globals.css

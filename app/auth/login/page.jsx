@@ -1,75 +1,60 @@
 "use client";
 
-import { endpoints } from "@/api/endpoints";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import axios from "axios";
-import { useAuth } from "@/context/authContext";
-import toast from "react-hot-toast";
-import LoginForm from "@/components/LoginForm";
-import pokemon from '../../../asset/images/pokemon.png'
-import Image from "next/image";
-
-const schema = z.object({
-  email: z.string().email("Invalid email"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-});
+import LoginForm from "@/components/auth/LoginForm";
+import { Box, Typography, Container } from "@mui/material";
 
 export default function Page() {
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const { user, accessToken, login } = useAuth();
-  const router = useRouter();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(schema),
-  });
-
-  // const notify = () => toast.success("LoggedIn Successfully");
-  // const errornotify = () => toast.error("Error Logging In User");
-
-  // const onSubmit = async (data) => {
-  //   setLoading(true);
-  //   setError("");
-
-  //   try {
-  //     await login(data.email, data.password);
-  //     notify();
-  //   } catch (err) {
-  //     console.log("err", err);
-  //     setError(err.message);
-  //     errornotify(err.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   return (
-    <div className="min-h-screen flex">
-      <div className="w-1/3 h-screen hidden md:block relative">
-        <Image src={pokemon} alt="Pokemon" fill className="object-cover" />
-      </div>
-      <div className="w-full md:w-2/3 flex items-center justify-center bg-gradient-to-br from-indigo-100 via-white to-blue-100 p-6">
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl hover:shadow-blue-300 transition duration-300 ease-in-out p-8">
-          <div className="mb-8 text-center">
-            <h1 className="text-4xl font-extrabold text-blue-700">
-              Welcome to Pomni
-            </h1>
-            <p className="text-gray-600 mt-2">
-              Elevate your productivity — smart task & project management made
-              effortless.
-            </p>
-          </div>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "linear-gradient(135deg, #f0f4ff 0%, #dbeafe 100%)",
+        p: 2,
+      }}
+    >
+      <Container
+        maxWidth="sm"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 4,
+        }}
+      >
+        <Box sx={{ textAlign: "center" }}>
+          <Typography
+            variant="h3"
+            fontWeight={700}
+            color="primary.main"
+            sx={{ mb: 1 }}
+          >
+            Welcome to Pomni
+          </Typography>
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{ lineHeight: 1.6 }}
+          >
+            Elevate your productivity — smart task & project management made effortless.
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            width: "100%",
+            borderRadius: 4,
+            boxShadow: "0px 20px 40px rgba(0,0,0,0.08)",
+            p: 5,
+            bgcolor: "background.paper",
+            backdropFilter: "blur(8px)",
+          }}
+        >
           <LoginForm />
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Container>
+    </Box>
   );
 }

@@ -60,15 +60,6 @@ export default function ProfilePage() {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      // await axiosInstance.put(
-      //   endpoints.user.update(user?.id),
-      //   data,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${accessToken}`,
-      //     },
-      //   }
-      // );
       await UpdateUser(user?.id, data);
 
       alert("Profile updated successfully");

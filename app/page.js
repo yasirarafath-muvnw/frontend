@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
-import LoginForm from "@/components/LoginForm";
+import LoginForm from "@/components/auth/LoginForm";
 import pokemon from "@/asset/images/pokemon.png";
 
 export default function Home() {
